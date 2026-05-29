@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.008.001.09">
+  <FIToFICstmrCdtTrf>
+    <GrpHdr>
+      <MsgId>PACS008BLUEUSNY20220718001</MsgId>
+      <CreDtTm>2022-07-18T10:00:00</CreDtTm>
+      <NbOfTxs>1</NbOfTxs>
+      <SttlmInf>
+        <SttlmMtd>INDA</SttlmMtd>
+      </SttlmInf>
+    </GrpHdr>
+    <CdtTrfTxInf>
+      <PmtId>
+        <InstrId>INSTR001BLUEUSNY20220718</InstrId>
+        <EndToEndId>8f01d8db87fa4ef888e223a6f5eef3aa</EndToEndId>
+        <TxId>455d2a5faecb4167ad8c1d985588e8e2</TxId>
+      </PmtId>
+      <IntrBkSttlmAmt Ccy="USD">125000.00</IntrBkSttlmAmt>
+      <IntrBkSttlmDt>2022-07-18</IntrBkSttlmDt>
+      <InstgAgt>
+        <FinInstnId>
+          <BICFI>BLUEUSNY001</BICFI>
+        </FinInstnId>
+      </InstgAgt>
+      <InstdAgt>
+        <FinInstnId>
+          <BICFI>GRENCHZZ002</BICFI>
+        </FinInstnId>
+      </InstdAgt>
+      <Dbtr>
+        <Nm>ACME Corporation</Nm>
+      </Dbtr>
+      <DbtrAcct>
+        <Id>
+          <IBAN>US12345678901234567890</IBAN>
+        </Id>
+      </DbtrAcct>
+      <Cdtr>
+        <Nm>Green Bank Customer</Nm>
+      </Cdtr>
+      <CdtrAcct>
+        <Id>
+          <IBAN>CH56048350012345678009</IBAN>
+        </Id>
+      </CdtrAcct>
+    </CdtTrfTxInf>
+  </FIToFICstmrCdtTrf>
+</Document>

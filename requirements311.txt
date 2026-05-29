@@ -1,0 +1,21 @@
+# Ontology Python 3.11 requirements
+# Install: ./venv311/bin/pip install -r requirements311.txt
+
+# MCP server
+mcp[cli]>=1.0.0
+
+# Core pipeline
+rdflib>=7.0.0
+lxml>=5.0.0
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.5.0
+python-multipart>=0.0.6
+httpx>=0.26.0
+orjson>=3.9.0
+
+# Persistent graph store (Oxigraph)
+pyoxigraph>=0.5.0
+
+# WebSocket streaming
+websockets>=12.0

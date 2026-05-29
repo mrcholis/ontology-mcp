@@ -1,0 +1,15 @@
+{
+  "_comment": "Ontology MCP Server — Claude Desktop configuration",
+  "_instructions": [
+    "Copy the 'mcpServers' block into your Claude Desktop config at:",
+    "  ~/Library/Application Support/Claude/claude_desktop_config.json",
+    "Then restart Claude Desktop."
+  ],
+  "mcpServers": {
+    "ontology": {
+      "command": "/Users/mark/ONTOLOGY/venv311/bin/python",
+      "args": ["/Users/mark/ONTOLOGY/mcp_server.py"],
+      "env": {}
+    }
+  }
+}

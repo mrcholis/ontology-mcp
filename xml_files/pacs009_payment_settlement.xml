@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.009.001.08">
+  <FinInstToFinInstCdtTrf>
+    <GrpHdr>
+      <MsgId>PACS009GRENCHZZ20220718001</MsgId>
+      <CreDtTm>2022-07-18T11:30:00</CreDtTm>
+      <NbOfTxs>1</NbOfTxs>
+      <SttlmInf>
+        <SttlmMtd>INDA</SttlmMtd>
+      </SttlmInf>
+    </GrpHdr>
+    <CdtTrfTxInf>
+      <PmtId>
+        <InstrId>STTL001GRENCHZZ20220718</InstrId>
+        <EndToEndId>8f01d8db87fa4ef888e223a6f5eef3aa</EndToEndId>
+      </PmtId>
+      <IntrBkSttlmAmt Ccy="USD">125000.00</IntrBkSttlmAmt>
+      <IntrBkSttlmDt>2022-07-18</IntrBkSttlmDt>
+      <InstgAgt>
+        <FinInstnId>
+          <BICFI>GRENCHZZ002</BICFI>
+        </FinInstnId>
+      </InstgAgt>
+      <InstdAgt>
+        <FinInstnId>
+          <BICFI>FEDNYUSS001</BICFI>
+        </FinInstnId>
+      </InstdAgt>
+    </CdtTrfTxInf>
+  </FinInstToFinInstCdtTrf>
+</Document>

@@ -1,0 +1,150 @@
+@prefix fin: <http://example.org/financial/ontology#> .
+@prefix inst: <http://example.org/financial/instance#> .
+@prefix iso20022: <http://example.org/iso20022/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+inst:account_statement_STMT-001_20260124120700 a fin:AccountStatement,
+        iso20022:camt_053 ;
+    fin:balanceDiscrepancy 100.0 ;
+    fin:balanceValid false ;
+    fin:closingBalance inst:closing_balance_STMT-001 ;
+    fin:confidence 1.0 ;
+    fin:hasEntry inst:entry_STMT-001_0 ;
+    fin:messageId "STMT-001"^^xsd:string ;
+    fin:openingBalance inst:opening_balance_STMT-001 ;
+    fin:sourceSystem "statement_system"^^xsd:string ;
+    fin:statementId "STMT-001"^^xsd:string ;
+    fin:timestamp "2026-01-24T12:07:00.384606"^^xsd:dateTime .
+
+inst:investigation_resolution_20220718USDDSA6365289405GRENCHZZ002_20220718132948 a fin:InvestigationResolution,
+        iso20022:camt_029 ;
+    fin:assignmentId "20220718USDDSA6365289405GRENCHZZ002"^^xsd:string ;
+    fin:cancellationAccepted false ;
+    fin:confidence 1.0 ;
+    fin:fromInstitution inst:institution_GRENCHZZ002 ;
+    fin:messageId "20220718USDDSA6365289405GRENCHZZ002"^^xsd:string ;
+    fin:originalMessageId "20220718USDDSA9153934686BLUEUSNY001"^^xsd:string ;
+    fin:originalMessageType "pacs.008.001.09"^^xsd:string ;
+    fin:sourceSystem """
+                        """^^xsd:string ;
+    fin:statusCode "RJCR"^^xsd:string ;
+    fin:statusDescription "Rejected - Cancellation not allowed"^^xsd:string ;
+    fin:timestamp "2022-07-18T13:29:48"^^xsd:dateTime ;
+    fin:toInstitution inst:institution_BLUEUSNY001 .
+
+inst:payment_cancellation_CASE_001 a fin:PaymentCancellation,
+        iso20022:camt_056 ;
+    fin:caseId "CASE_001"^^xsd:string ;
+    fin:confidence 1.0 ;
+    fin:fromInstitution inst:institution_BLUEUSNY001 ;
+    fin:hasAmount inst:amount_CASE_001 ;
+    fin:hasReason inst:reason_CUST ;
+    fin:messageId "20220718USDDSA9407803873BLUEUSNY001"^^xsd:string ;
+    fin:originalTransaction inst:transaction_TXN_123 ;
+    fin:sourceSystem """
+                        """^^xsd:string ;
+    fin:timestamp "2022-07-18T13:28:33"^^xsd:dateTime ;
+    fin:toInstitution inst:institution_GRENCHZZ002 .
+
+inst:unable_to_apply_20220718USDDSA1952762241GRENCHZZ002_20220718132755 a fin:UnableToApply,
+        iso20022:camt_026 ;
+    fin:assignmentId "20220718USDDSA1952762241GRENCHZZ002"^^xsd:string ;
+    fin:confidence 1.0 ;
+    fin:fromInstitution inst:institution_GRENCHZZ002 ;
+    fin:hasAmount inst:amount_20220718USDDSA1952762241GRENCHZZ002 ;
+    fin:justificationCode "IN39"^^xsd:string ;
+    fin:justificationDescription "Incorrect information - beneficiary details"^^xsd:string ;
+    fin:messageId "20220718USDDSA1952762241GRENCHZZ002"^^xsd:string ;
+    fin:originalInstructionId "USDDSA20220718BLUEUSNY001B382477953"^^xsd:string ;
+    fin:sourceSystem """
+                        """^^xsd:string ;
+    fin:timestamp "2022-07-18T13:27:55"^^xsd:dateTime ;
+    fin:toInstitution inst:institution_BLUEUSNY001 .
+
+fin:AccountTransaction a owl:Class ;
+    rdfs:label "Account Transaction"@en ;
+    rdfs:comment "Signal representing an account transaction (camt.053/054)"@en ;
+    rdfs:subClassOf fin:FinancialSignal .
+
+fin:FinancialOntology a owl:Ontology ;
+    rdfs:label "Financial Domain Ontology"@en ;
+    rdfs:comment "Ontology for ISO 20022 financial messaging and signals"@en ;
+    owl:versionInfo "1.0" .
+
+fin:PaymentInitiation a owl:Class ;
+    rdfs:label "Payment Initiation"@en ;
+    rdfs:comment "Signal representing a payment initiation (pacs.008)"@en ;
+    rdfs:subClassOf fin:FinancialSignal .
+
+fin:PaymentSettlement a owl:Class ;
+    rdfs:label "Payment Settlement"@en ;
+    rdfs:comment "Signal representing a payment settlement (pacs.009)"@en ;
+    rdfs:subClassOf fin:FinancialSignal .
+
+inst:amount_20220718USDDSA1952762241GRENCHZZ002 a fin:Amount ;
+    fin:currency "USD"^^xsd:string ;
+    fin:value 124850.0 .
+
+inst:amount_CASE_001 a fin:Amount ;
+    fin:currency "USD"^^xsd:string ;
+    fin:value 125000.0 .
+
+inst:closing_balance_STMT-001 a fin:Amount ;
+    fin:currency "USD"^^xsd:string ;
+    fin:value 900.0 .
+
+inst:entry_STMT-001_0 a fin:StatementEntry ;
+    fin:creditDebitIndicator "DBIT"^^xsd:string ;
+    fin:hasAmount inst:entry_amount_STMT-001_0 .
+
+inst:entry_amount_STMT-001_0 a fin:Amount ;
+    fin:currency "USD"^^xsd:string ;
+    fin:value 200.0 .
+
+inst:opening_balance_STMT-001 a fin:Amount ;
+    fin:currency "USD"^^xsd:string ;
+    fin:value 1000.0 .
+
+inst:reason_CUST a fin:CancellationReason ;
+    fin:reasonCode "CUST"^^xsd:string .
+
+inst:transaction_TXN_123 a fin:Transaction ;
+    fin:messageId "UNKNOWN"^^xsd:string ;
+    fin:transactionId "TXN_123"^^xsd:string .
+
+fin:AccountStatement a owl:Class ;
+    rdfs:label "Account Statement"@en ;
+    rdfs:comment "Signal representing account statement (camt.053)"@en ;
+    rdfs:subClassOf fin:FinancialSignal .
+
+fin:InvestigationResolution a owl:Class ;
+    rdfs:label "Investigation Resolution"@en ;
+    rdfs:comment "Signal representing resolution of investigation (camt.029)"@en ;
+    rdfs:subClassOf fin:FinancialSignal .
+
+fin:PaymentCancellation a owl:Class ;
+    rdfs:label "Payment Cancellation"@en ;
+    rdfs:comment "Signal representing a payment cancellation request (camt.056)"@en ;
+    rdfs:subClassOf fin:FinancialSignal .
+
+fin:StatementEntry a owl:Class ;
+    rdfs:label "Statement Entry"@en ;
+    rdfs:comment "Individual entry in an account statement"@en .
+
+fin:UnableToApply a owl:Class ;
+    rdfs:label "Unable to Apply"@en ;
+    rdfs:comment "Signal representing unable to apply notification (camt.026)"@en ;
+    rdfs:subClassOf fin:FinancialSignal .
+
+inst:institution_BLUEUSNY001 a fin:FinancialInstitution ;
+    fin:bic "BLUEUSNY001"^^xsd:string .
+
+inst:institution_GRENCHZZ002 a fin:FinancialInstitution ;
+    fin:bic "GRENCHZZ002"^^xsd:string .
+
+fin:FinancialSignal a owl:Class ;
+    rdfs:label "Financial Signal"@en ;
+    rdfs:comment "Base class for all financial signals extracted from ISO 20022 messages"@en .
+

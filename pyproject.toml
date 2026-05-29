@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "ontology-mcp"
+version = "2.0.0"
+description = "Turn ISO 20022 banking messages into a queryable knowledge graph — accessible to any AI agent via MCP."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+keywords = ["mcp", "iso20022", "ontology", "rdf", "finance", "banking"]
+
+authors = [
+    {name = "Mark Quercioli"},
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Topic :: Office/Business :: Financial",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+]
+
+dependencies = [
+    "mcp[cli]>=1.0.0",
+    "rdflib>=7.0.0",
+    "lxml>=5.0.0",
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "pydantic>=2.5.0",
+    "python-multipart>=0.0.6",
+    "httpx>=0.26.0",
+    "orjson>=3.9.0",
+]
+
+[project.optional-dependencies]
+oxigraph = ["pyoxigraph>=0.5.0"]
+streaming = ["websockets>=12.0"]
+all = ["ontology-mcp[oxigraph,streaming]"]
+
+[project.urls]
+Homepage = "https://github.com/markqueue/ontology-mcp"
+Repository = "https://github.com/markqueue/ontology-mcp"
+
+[project.scripts]
+ontology-mcp = "mcp_server:main"
+
+[tool.setuptools.packages.find]
+include = ["src.*", "src"]

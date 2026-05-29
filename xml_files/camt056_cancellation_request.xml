@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Message xmlns="urn:issettled" xmlns:ispcr="urn:iso:std:iso:20022:tech:xsd:camt.056.001.10">
+    <FIToFIPmtCxlReq>
+        <ispcr:Assgnmt>
+            <ispcr:Id>20220718USDDSA9407803873BLUEUSNY001</ispcr:Id>
+            <ispcr:Assgnr>
+                <ispcr:Agt>
+                    <ispcr:FinInstnId>
+                        <ispcr:BICFI>BLUEUSNY001</ispcr:BICFI>
+                    </ispcr:FinInstnId>
+                </ispcr:Agt>
+            </ispcr:Assgnr>
+            <ispcr:Assgne>
+                <ispcr:Agt>
+                    <ispcr:FinInstnId>
+                        <ispcr:BICFI>GRENCHZZ002</ispcr:BICFI>
+                    </ispcr:FinInstnId>
+                </ispcr:Agt>
+            </ispcr:Assgne>
+            <ispcr:CreDtTm>2022-07-18T13:28:33</ispcr:CreDtTm>
+        </ispcr:Assgnmt>
+        <ispcr:Case>
+            <ispcr:Id>CASE_001</ispcr:Id>
+        </ispcr:Case>
+        <ispcr:Undrlyg>
+            <ispcr:TxInf>
+                <ispcr:OrgnlTxId>455d2a5faecb4167ad8c1d985588e8e2</ispcr:OrgnlTxId>
+                <ispcr:OrgnlEndToEndId>8f01d8db87fa4ef888e223a6f5eef3aa</ispcr:OrgnlEndToEndId>
+                <ispcr:OrgnlIntrBkSttlmAmt Ccy="USD">125000</ispcr:OrgnlIntrBkSttlmAmt>
+                <ispcr:CxlRsnInf>
+                    <ispcr:Rsn>
+                        <ispcr:Cd>CUST</ispcr:Cd>
+                    </ispcr:Rsn>
+                </ispcr:CxlRsnInf>
+            </ispcr:TxInf>
+        </ispcr:Undrlyg>
+    </FIToFIPmtCxlReq>
+</Message>

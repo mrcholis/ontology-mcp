@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+venv311/
+.env
+
+# Graph store (persistent data — rebuild via regenerate.py)
+graph_store/
+
+# Generated output
+output/*.ttl
+output/*.jsonld
+output/*.rdf
+!output/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

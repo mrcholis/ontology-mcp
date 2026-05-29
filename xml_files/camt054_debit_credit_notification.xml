@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.054.001.08">
+  <BkToCstmrDbtCdtNtfctn>
+    <GrpHdr>
+      <MsgId>CAMT054GRENCHZZ20220718001</MsgId>
+      <CreDtTm>2022-07-18T14:00:00</CreDtTm>
+      <NbOfNtfctns>1</NbOfNtfctns>
+    </GrpHdr>
+    <Ntfctn>
+      <Id>NTF20220718GRENCHZZ001</Id>
+      <Acct>
+        <Id>
+          <IBAN>CH56048350012345678009</IBAN>
+        </Id>
+      </Acct>
+      <Ntry>
+        <Amt Ccy="USD">125000.00</Amt>
+        <CdtDbtInd>CRDT</CdtDbtInd>
+        <Sts>
+          <Cd>BOOK</Cd>
+        </Sts>
+        <BookgDt>
+          <Dt>2022-07-18</Dt>
+        </BookgDt>
+        <ValDt>
+          <Dt>2022-07-18</Dt>
+        </ValDt>
+        <AcctSvcrRef>SVCREF20220718001</AcctSvcrRef>
+        <NtryDtls>
+          <TxDtls>
+            <Refs>
+              <EndToEndId>8f01d8db87fa4ef888e223a6f5eef3aa</EndToEndId>
+              <TxId>455d2a5faecb4167ad8c1d985588e8e2</TxId>
+            </Refs>
+          </TxDtls>
+        </NtryDtls>
+      </Ntry>
+    </Ntfctn>
+  </BkToCstmrDbtCdtNtfctn>
+</Document>

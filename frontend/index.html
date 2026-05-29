@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Intelligence</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💳</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --gradient-1: #e0e7ff;
+            --gradient-2: #f3f4f6;
+            --gradient-3: #dbeafe;
+            --gradient-4: #e5e7eb;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --accent-primary: #2563eb;
+            --accent-secondary: #1e40af;
+        }
+        
+        [data-theme="dark"] {
+            --gradient-1: #1e293b;
+            --gradient-2: #0f172a;
+            --gradient-3: #1e40af;
+            --gradient-4: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-primary: #60a5fa;
+            --accent-secondary: #3b82f6;
+        }
+        
+        body {
+            background: linear-gradient(-45deg, var(--gradient-1), var(--gradient-2), var(--gradient-3), var(--gradient-4));
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            min-height: 100vh;
+            color: var(--text-primary);
+            transition: all 0.5s ease;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="dark"] .glass {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        .glass:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .glass:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+        }
+        
+        /* Dropzone */
+        .dropzone {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .dropzone {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .dropzone:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: var(--accent-primary);
+            border-style: solid;
+        }
+        
+        .dropzone-active {
+            background: rgba(37, 99, 235, 0.2) !important;
+            border-color: var(--accent-primary) !important;
+            border-style: solid !important;
+        }
+        
+        /* Alert cards with glassmorphism */
+        .alert-critical {
+            background: rgba(239, 68, 68, 0.15);
+            backdrop-filter: blur(12px);
+            border-left: 4px solid #ef4444;
+        }
+        
+        .alert-error {
+            background: rgba(249, 115, 22, 0.15);
+            backdrop-filter: blur(12px);
+            border-left: 4px solid #f97316;
+        }
+        
+        .alert-warning {
+            background: rgba(234, 179, 8, 0.15);
+            backdrop-filter: blur(12px);
+            border-left: 4px solid #eab308;
+        }
+        
+        .alert-info {
+            background: rgba(59, 130, 246, 0.15);
+            backdrop-filter: blur(12px);
+            border-left: 4px solid #3b82f6;
+        }
+        
+        /* Timeline */
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 40px;
+            bottom: -20px;
+            width: 2px;
+            background: rgba(156, 163, 175, 0.3);
+        }
+        
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        
+        .severity-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+        
+        .severity-critical {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid #ef4444;
+        }
+        
+        .severity-error {
+            background: rgba(249, 115, 22, 0.2);
+            border: 2px solid #f97316;
+        }
+        
+        .severity-warning {
+            background: rgba(234, 179, 8, 0.2);
+            border: 2px solid #eab308;
+        }
+        
+        .severity-info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 2px solid #3b82f6;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Code block */
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .code-text {
+            color: #22c55e;
+        }
+        
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="dark"] .theme-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Theme Toggle -->
+    <button onclick="toggleTheme()" class="theme-toggle" title="Toggle theme">
+        <span id="themeIcon" class="text-2xl">🌙</span>
+    </button>
+    
+    <!-- Header -->
+    <header class="glass sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-6">
+            <h1 class="text-3xl font-bold flex items-center gap-3" style="color: var(--text-primary);">
+                <span>💳</span>
+                Payment Intelligence
+            </h1>
+            <p class="text-sm mt-1" style="color: var(--text-secondary);">
+                ISO 20022 Semantic Analysis Platform
+            </p>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+        
+        <!-- Upload Section -->
+        <div class="mb-12">
+            <div id="dropzone" class="dropzone rounded-2xl p-20 text-center cursor-pointer">
+                <div class="text-7xl mb-6">📤</div>
+                <h2 class="text-3xl font-bold mb-3" style="color: var(--text-primary);">
+                    Drop ISO 20022 XML File Here
+                </h2>
+                <p class="text-lg mb-6" style="color: var(--text-secondary);">
+                    or click to browse files
+                </p>
+                <div class="inline-block glass rounded-full px-6 py-2">
+                    <p class="text-sm font-semibold" style="color: var(--text-primary);">
+                        Supports: camt.026, camt.029, camt.053, camt.056
+                    </p>
+                </div>
+                <input type="file" id="fileInput" accept=".xml" class="hidden">
+            </div>
+            
+            <!-- Load Full Demo Button -->
+            <div class="text-center mt-6">
+                <button onclick="loadFullDemo()" class="btn-secondary px-8 py-4 rounded-xl font-bold inline-flex items-center gap-3">
+                    <span class="text-2xl">🎬</span>
+                    <span>Load Full Demo (All 4 Messages)</span>
+                </button>
+                <p class="text-sm mt-3" style="color: var(--text-secondary);">See complete payment lifecycle with relationships</p>
+            </div>
+        </div>
+        
+        <!-- Loading State -->
+        <div id="loading" class="hidden text-center py-20">
+            <div class="glass rounded-3xl p-12 inline-block">
+                <div class="inline-block animate-spin rounded-full h-20 w-20 border-b-4 mb-6" style="border-color: var(--accent-primary);"></div>
+                <p class="text-2xl font-bold" style="color: var(--text-primary);">Analyzing payment messages...</p>
+                <p class="text-sm mt-2" style="color: var(--text-secondary);">Extracting signals • Mapping ontology • Detecting relationships</p>
+            </div>
+        </div>
+        
+        <!-- Error State -->
+        <div id="error" class="hidden glass rounded-2xl p-6 mb-8 border-l-4 border-red-500">
+            <div class="flex items-center">
+                <div class="text-4xl mr-4">❌</div>
+                <div>
+                    <h3 class="text-xl font-bold" style="color: var(--text-primary);">Error</h3>
+                    <p id="errorMessage" class="text-red-600 mt-1"></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div id="results" class="hidden">
+            
+            <!-- File Info -->
+            <div class="glass rounded-2xl p-6 mb-8">
+                <div class="flex items-center">
+                    <div class="text-4xl mr-4">📄</div>
+                    <div>
+                        <p class="text-sm font-semibold" style="color: var(--text-secondary);">Analyzing file:</p>
+                        <p id="fileName" class="text-xl font-bold mt-1" style="color: var(--text-primary);"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <div class="glass rounded-2xl p-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wide" style="color: var(--text-secondary);">Messages</p>
+                            <p id="messageCount" class="text-5xl font-bold mt-3" style="color: var(--accent-primary);">-</p>
+                        </div>
+                        <div class="text-5xl opacity-20">📨</div>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-2xl p-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wide" style="color: var(--text-secondary);">Total Amount</p>
+                            <p id="totalAmount" class="text-5xl font-bold text-green-600 mt-3">-</p>
+                        </div>
+                        <div class="text-5xl opacity-20">💰</div>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-2xl p-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wide" style="color: var(--text-secondary);">Alerts</p>
+                            <p id="alertCount" class="text-5xl font-bold text-red-600 mt-3">-</p>
+                        </div>
+                        <div class="text-5xl opacity-20">⚠️</div>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-2xl p-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wide" style="color: var(--text-secondary);">Relationships</p>
+                            <p id="relationshipCount" class="text-5xl font-bold text-blue-600 mt-3">-</p>
+                        </div>
+                        <div class="text-5xl opacity-20">🔗</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Alerts Section -->
+            <div class="glass rounded-2xl p-8 mb-8">
+                <div class="flex items-center mb-8">
+                    <div class="text-4xl mr-4">⚠️</div>
+                    <h2 class="text-3xl font-bold" style="color: var(--text-primary);">Alerts</h2>
+                </div>
+                <div id="alertsList"></div>
+            </div>
+            
+            <!-- Timeline Section -->
+            <div class="glass rounded-2xl p-8 mb-8">
+                <div class="flex items-center mb-8">
+                    <div class="text-4xl mr-4">📊</div>
+                    <h2 class="text-3xl font-bold" style="color: var(--text-primary);">Payment Timeline</h2>
+                </div>
+                <div id="timeline"></div>
+            </div>
+            
+            <!-- Additional Info -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="glass rounded-2xl p-8">
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2" style="color: var(--text-primary);">
+                        <span>🏦</span> Institutions Involved
+                    </h3>
+                    <div id="institutionsList" class="space-y-3"></div>
+                </div>
+                
+                <div class="glass rounded-2xl p-8">
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2" style="color: var(--text-primary);">
+                        <span>📋</span> Message Types
+                    </h3>
+                    <div id="messageTypesList" class="space-y-3"></div>
+                </div>
+            </div>
+            
+            <!-- Semantic / RDF Section -->
+            <div class="glass rounded-2xl p-8 mb-8 border-l-4" style="border-left-color: var(--accent-primary);">
+                <div class="flex items-center mb-6">
+                    <div class="text-4xl mr-4">🧠</div>
+                    <h2 class="text-3xl font-bold" style="color: var(--text-primary);">Semantic Intelligence</h2>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-6 mb-6 text-center">
+                    <div class="glass rounded-xl p-6">
+                        <p class="text-xs font-bold uppercase tracking-wide" style="color: var(--text-secondary);">Signals Extracted</p>
+                        <p id="signalsExtracted" class="text-4xl font-bold mt-3" style="color: var(--accent-primary);">-</p>
+                    </div>
+                    <div class="glass rounded-xl p-6">
+                        <p class="text-xs font-bold uppercase tracking-wide" style="color: var(--text-secondary);">RDF Triples</p>
+                        <p id="rdfTriples" class="text-4xl font-bold text-blue-600 mt-3">-</p>
+                    </div>
+                    <div class="glass rounded-xl p-6">
+                        <p class="text-xs font-bold uppercase tracking-wide" style="color: var(--text-secondary);">Ontology Mapped</p>
+                        <p id="ontologyMapped" class="text-4xl font-bold text-green-600 mt-3">-</p>
+                    </div>
+                </div>
+                
+                <div class="code-block rounded-xl p-6 font-mono text-sm overflow-x-auto overflow-y-auto max-h-96 mb-6">
+                    <pre id="rdfPreview" class="code-text whitespace-pre">Loading RDF preview...</pre>
+                </div>
+                
+                <div class="flex gap-4 flex-wrap">
+                    <a id="downloadRdfBtn" href="/api/download/rdf" download class="btn-primary px-8 py-4 rounded-xl font-bold inline-block">
+                        💾 Download RDF Ontology
+                    </a>
+                    <button onclick="showRdfExplanation()" class="btn-secondary px-8 py-4 rounded-xl font-bold">
+                        ℹ️ What is RDF?
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex gap-4">
+                <button onclick="reset()" class="btn-secondary px-8 py-4 rounded-xl font-bold">
+                    ← Analyze Another File
+                </button>
+            </div>
+            
+        </div>
+        
+    </main>
+    
+    <!-- Footer -->
+    <footer class="text-center py-12 mt-20">
+        <div class="glass rounded-2xl inline-block px-8 py-4">
+            <p class="font-semibold" style="color: var(--text-secondary);">Payment Intelligence MVP • Built with ISO 20022 Standards</p>
+        </div>
+    </footer>
+    
+    <!-- RDF Explanation Modal -->
+    <div id="rdfModal" class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-3xl font-bold flex items-center gap-3" style="color: var(--text-primary);">
+                        <span class="text-4xl">🧠</span>
+                        What is RDF?
+                    </h2>
+                    <button onclick="closeRdfModal()" class="text-4xl hover:opacity-70" style="color: var(--text-secondary);">
+                        ×
+                    </button>
+                </div>
+                
+                <div class="space-y-6" style="color: var(--text-primary);">
+                    <p class="text-lg">
+                        <strong>RDF (Resource Description Framework)</strong> is a W3C standard for representing information as a <strong>semantic web knowledge graph</strong>.
+                    </p>
+                    
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--accent-primary);">Why RDF Matters</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3">
+                                <span class="text-2xl">✅</span>
+                                <div>
+                                    <strong>Machines Understand Relationships</strong>
+                                    <p class="text-sm mt-1" style="color: var(--text-secondary);">Data has meaning, not just structure</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-2xl">✅</span>
+                                <div>
+                                    <strong>Linkable Across Systems</strong>
+                                    <p class="text-sm mt-1" style="color: var(--text-secondary);">Connect to other knowledge graphs worldwide</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-2xl">✅</span>
+                                <div>
+                                    <strong>Queries Can Infer New Facts</strong>
+                                    <p class="text-sm mt-1" style="color: var(--text-secondary);">SPARQL queries discover implicit relationships</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-2xl">✅</span>
+                                <div>
+                                    <strong>Standards-Compliant</strong>
+                                    <p class="text-sm mt-1" style="color: var(--text-secondary);">Interoperable with any RDF-compatible system</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="code-block rounded-xl p-4">
+                            <h4 class="font-bold text-red-500 mb-2">❌ Traditional JSON</h4>
+                            <pre class="text-xs" style="color: var(--text-secondary);">{
+  "from": "BLUEBANK",
+  "to": "GREENBANK",
+  "amount": 125000
+}</pre>
+                            <p class="text-xs mt-2" style="color: var(--text-secondary);">Just data - no meaning</p>
+                        </div>
+                        
+                        <div class="code-block rounded-xl p-4">
+                            <h4 class="font-bold text-green-500 mb-2">✅ RDF Triples</h4>
+                            <pre class="text-xs code-text">&lt;payment&gt; fin:from &lt;BLUEBANK&gt; .
+&lt;payment&gt; fin:to &lt;GREENBANK&gt; .
+&lt;payment&gt; fin:amount "125000"^^xsd:decimal .</pre>
+                            <p class="text-xs mt-2" style="color: var(--text-secondary);">Semantic meaning included</p>
+                        </div>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--accent-primary);">What You Can Do With RDF</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-2xl mb-2">🔍</div>
+                                <strong>SPARQL Queries</strong>
+                                <p class="text-sm mt-1" style="color: var(--text-secondary);">Query across relationships like SQL for graphs</p>
+                            </div>
+                            <div>
+                                <div class="text-2xl mb-2">🔗</div>
+                                <strong>Link Knowledge Graphs</strong>
+                                <p class="text-sm mt-1" style="color: var(--text-secondary);">Connect to DBpedia, Wikidata, industry ontologies</p>
+                            </div>
+                            <div>
+                                <div class="text-2xl mb-2">🤖</div>
+                                <strong>Enable AI Reasoning</strong>
+                                <p class="text-sm mt-1" style="color: var(--text-secondary);">AI can infer new facts from relationships</p>
+                            </div>
+                            <div>
+                                <div class="text-2xl mb-2">📊</div>
+                                <strong>Build Graph Databases</strong>
+                                <p class="text-sm mt-1" style="color: var(--text-secondary);">Load into Neo4j, Blazegraph, GraphDB</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-3" style="color: var(--accent-primary);">Your Payment Data</h3>
+                        <p class="text-lg">
+                            Your payment was converted to <strong id="modalTripleCount" style="color: var(--accent-primary);">185</strong> semantic triples!
+                        </p>
+                        <p class="text-sm mt-2" style="color: var(--text-secondary);">
+                            This means your ISO 20022 XML is now part of a queryable, linkable, AI-ready knowledge graph.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 flex gap-4">
+                    <button onclick="closeRdfModal()" class="btn-primary px-8 py-3 rounded-xl font-bold flex-1">
+                        Got It!
+                    </button>
+                    <a href="https://www.w3.org/RDF/" target="_blank" class="btn-secondary px-8 py-3 rounded-xl font-bold text-center">
+                        Learn More →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/app.js"></script>
+</body>
+</html>

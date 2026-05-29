@@ -1,0 +1,372 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix fin: <http://example.org/financial/ontology#> .
+@prefix iso20022: <http://example.org/iso20022/ontology#> .
+
+# ============================================================================
+# Financial Domain Ontology
+# ============================================================================
+# Purpose: Semantic representation of ISO 20022 financial signals
+# Author: Signal Extraction System
+# Version: 1.0
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Ontology Definition
+# ----------------------------------------------------------------------------
+
+fin:FinancialOntology a owl:Ontology ;
+    rdfs:label "Financial Domain Ontology"@en ;
+    rdfs:comment "Ontology for ISO 20022 financial messaging and signals"@en ;
+    owl:versionInfo "1.0" .
+
+# ----------------------------------------------------------------------------
+# Core Classes
+# ----------------------------------------------------------------------------
+
+fin:FinancialSignal a owl:Class ;
+    rdfs:label "Financial Signal"@en ;
+    rdfs:comment "Base class for all financial signals extracted from ISO 20022 messages"@en .
+
+fin:PaymentCancellation a owl:Class ;
+    rdfs:subClassOf fin:FinancialSignal ;
+    rdfs:label "Payment Cancellation"@en ;
+    rdfs:comment "Signal representing a payment cancellation request (camt.056)"@en .
+
+fin:PaymentInitiation a owl:Class ;
+    rdfs:subClassOf fin:FinancialSignal ;
+    rdfs:label "Payment Initiation"@en ;
+    rdfs:comment "Signal representing a payment initiation (pacs.008)"@en .
+
+fin:PaymentSettlement a owl:Class ;
+    rdfs:subClassOf fin:FinancialSignal ;
+    rdfs:label "Payment Settlement"@en ;
+    rdfs:comment "Signal representing a payment settlement (pacs.009)"@en .
+
+fin:AccountTransaction a owl:Class ;
+    rdfs:subClassOf fin:FinancialSignal ;
+    rdfs:label "Account Transaction"@en ;
+    rdfs:comment "Signal representing an account transaction (camt.053/054)"@en .
+
+fin:InvestigationResolution a owl:Class ;
+    rdfs:subClassOf fin:FinancialSignal ;
+    rdfs:label "Investigation Resolution"@en ;
+    rdfs:comment "Signal representing resolution of investigation (camt.029)"@en .
+
+fin:UnableToApply a owl:Class ;
+    rdfs:subClassOf fin:FinancialSignal ;
+    rdfs:label "Unable to Apply"@en ;
+    rdfs:comment "Signal representing unable to apply notification (camt.026)"@en .
+
+fin:AccountStatement a owl:Class ;
+    rdfs:subClassOf fin:FinancialSignal ;
+    rdfs:label "Account Statement"@en ;
+    rdfs:comment "Signal representing account statement (camt.053)"@en .
+
+fin:StatementEntry a owl:Class ;
+    rdfs:label "Statement Entry"@en ;
+    rdfs:comment "Individual entry in an account statement (camt.053/054)"@en .
+
+# ----------------------------------------------------------------------------
+# Supporting Classes
+# ----------------------------------------------------------------------------
+
+fin:FinancialInstitution a owl:Class ;
+    rdfs:label "Financial Institution"@en ;
+    rdfs:comment "A bank or financial institution"@en .
+
+fin:Amount a owl:Class ;
+    rdfs:label "Amount"@en ;
+    rdfs:comment "A monetary amount with currency"@en .
+
+fin:Transaction a owl:Class ;
+    rdfs:label "Transaction"@en ;
+    rdfs:comment "A financial transaction"@en .
+
+fin:CancellationReason a owl:Class ;
+    rdfs:label "Cancellation Reason"@en ;
+    rdfs:comment "Reason for payment cancellation"@en .
+
+# ----------------------------------------------------------------------------
+# Object Properties (Relationships)
+# ----------------------------------------------------------------------------
+
+fin:fromInstitution a owl:ObjectProperty ;
+    rdfs:label "from institution"@en ;
+    rdfs:domain fin:FinancialSignal ;
+    rdfs:range fin:FinancialInstitution ;
+    rdfs:comment "The institution initiating the signal"@en .
+
+fin:toInstitution a owl:ObjectProperty ;
+    rdfs:label "to institution"@en ;
+    rdfs:domain fin:FinancialSignal ;
+    rdfs:range fin:FinancialInstitution ;
+    rdfs:comment "The institution receiving the signal"@en .
+
+fin:hasAmount a owl:ObjectProperty ;
+    rdfs:label "has amount"@en ;
+    rdfs:domain fin:FinancialSignal ;
+    rdfs:range fin:Amount ;
+    rdfs:comment "The monetary amount associated with the signal"@en .
+
+fin:originalTransaction a owl:ObjectProperty ;
+    rdfs:label "original transaction"@en ;
+    rdfs:domain fin:PaymentCancellation ;
+    rdfs:range fin:Transaction ;
+    rdfs:comment "The original transaction being cancelled"@en .
+
+fin:hasReason a owl:ObjectProperty ;
+    rdfs:label "has reason"@en ;
+    rdfs:domain fin:PaymentCancellation ;
+    rdfs:range fin:CancellationReason ;
+    rdfs:comment "The reason for cancellation"@en .
+
+# ----------------------------------------------------------------------------
+# Data Properties (Attributes)
+# ----------------------------------------------------------------------------
+
+fin:messageId a owl:DatatypeProperty ;
+    rdfs:label "message ID"@en ;
+    rdfs:domain fin:FinancialSignal ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Unique identifier for the message"@en .
+
+fin:caseId a owl:DatatypeProperty ;
+    rdfs:label "case ID"@en ;
+    rdfs:domain fin:PaymentCancellation ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Case identifier for the cancellation request"@en .
+
+fin:transactionId a owl:DatatypeProperty ;
+    rdfs:label "transaction ID"@en ;
+    rdfs:domain fin:Transaction ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Unique identifier for the transaction"@en .
+
+fin:endToEndId a owl:DatatypeProperty ;
+    rdfs:label "end-to-end ID"@en ;
+    rdfs:domain fin:Transaction ;
+    rdfs:range xsd:string ;
+    rdfs:comment "End-to-end transaction identifier"@en .
+
+fin:timestamp a owl:DatatypeProperty ;
+    rdfs:label "timestamp"@en ;
+    rdfs:domain fin:FinancialSignal ;
+    rdfs:range xsd:dateTime ;
+    rdfs:comment "When the signal was created"@en .
+
+fin:settlementDate a owl:DatatypeProperty ;
+    rdfs:label "settlement date"@en ;
+    rdfs:domain fin:FinancialSignal ;
+    rdfs:range xsd:date ;
+    rdfs:comment "Date of settlement"@en .
+
+fin:value a owl:DatatypeProperty ;
+    rdfs:label "value"@en ;
+    rdfs:domain fin:Amount ;
+    rdfs:range xsd:decimal ;
+    rdfs:comment "Numerical value of the amount"@en .
+
+fin:currency a owl:DatatypeProperty ;
+    rdfs:label "currency"@en ;
+    rdfs:domain fin:Amount ;
+    rdfs:range xsd:string ;
+    rdfs:comment "ISO currency code (e.g., USD, EUR)"@en .
+
+fin:bic a owl:DatatypeProperty ;
+    rdfs:label "BIC"@en ;
+    rdfs:domain fin:FinancialInstitution ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Bank Identifier Code (SWIFT code)"@en .
+
+fin:institutionId a owl:DatatypeProperty ;
+    rdfs:label "institution ID"@en ;
+    rdfs:domain fin:FinancialInstitution ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Internal institution identifier"@en .
+
+fin:institutionName a owl:DatatypeProperty ;
+    rdfs:label "institution name"@en ;
+    rdfs:domain fin:FinancialInstitution ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Name of the financial institution"@en .
+
+fin:reasonCode a owl:DatatypeProperty ;
+    rdfs:label "reason code"@en ;
+    rdfs:domain fin:CancellationReason ;
+    rdfs:range xsd:string ;
+    rdfs:comment "ISO 20022 cancellation reason code (e.g., CUST, DUPL)"@en .
+
+fin:confidence a owl:DatatypeProperty ;
+    rdfs:label "confidence"@en ;
+    rdfs:domain fin:FinancialSignal ;
+    rdfs:range xsd:decimal ;
+    rdfs:comment "Confidence score of signal extraction (0.0 to 1.0)"@en .
+
+fin:sourceSystem a owl:DatatypeProperty ;
+    rdfs:label "source system"@en ;
+    rdfs:domain fin:FinancialSignal ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Source system that generated the signal"@en .
+
+# New properties for investigation resolution
+fin:statusCode a owl:DatatypeProperty ;
+    rdfs:label "status code"@en ;
+    rdfs:domain fin:InvestigationResolution ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Resolution status code (RJCR, ACCP, PDNG)"@en .
+
+fin:statusDescription a owl:DatatypeProperty ;
+    rdfs:label "status description"@en ;
+    rdfs:domain fin:InvestigationResolution ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Human-readable status description"@en .
+
+fin:cancellationAccepted a owl:DatatypeProperty ;
+    rdfs:label "cancellation accepted"@en ;
+    rdfs:domain fin:InvestigationResolution ;
+    rdfs:range xsd:boolean ;
+    rdfs:comment "Whether cancellation was accepted"@en .
+
+fin:originalMessageId a owl:DatatypeProperty ;
+    rdfs:label "original message ID"@en ;
+    rdfs:domain fin:InvestigationResolution ;
+    rdfs:range xsd:string ;
+    rdfs:comment "ID of the original message being responded to"@en .
+
+fin:originalMessageType a owl:DatatypeProperty ;
+    rdfs:label "original message type"@en ;
+    rdfs:domain fin:InvestigationResolution ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Type of the original message (e.g., pacs.008)"@en .
+
+# New properties for unable to apply
+fin:justificationCode a owl:DatatypeProperty ;
+    rdfs:label "justification code"@en ;
+    rdfs:domain fin:UnableToApply ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Code explaining why payment cannot be applied (e.g., IN39)"@en .
+
+fin:justificationDescription a owl:DatatypeProperty ;
+    rdfs:label "justification description"@en ;
+    rdfs:domain fin:UnableToApply ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Description of why payment cannot be applied"@en .
+
+fin:originalInstructionId a owl:DatatypeProperty ;
+    rdfs:label "original instruction ID"@en ;
+    rdfs:range xsd:string ;
+    rdfs:comment "ID of the original instruction"@en .
+
+# New properties for account statement
+fin:statementId a owl:DatatypeProperty ;
+    rdfs:label "statement ID"@en ;
+    rdfs:domain fin:AccountStatement ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Unique identifier for the statement"@en .
+
+fin:accountId a owl:DatatypeProperty ;
+    rdfs:label "account ID"@en ;
+    rdfs:domain fin:AccountStatement ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Account identifier"@en .
+
+fin:balanceValid a owl:DatatypeProperty ;
+    rdfs:label "balance valid"@en ;
+    rdfs:domain fin:AccountStatement ;
+    rdfs:range xsd:boolean ;
+    rdfs:comment "Whether the balance calculation is valid"@en .
+
+fin:balanceDiscrepancy a owl:DatatypeProperty ;
+    rdfs:label "balance discrepancy"@en ;
+    rdfs:domain fin:AccountStatement ;
+    rdfs:range xsd:decimal ;
+    rdfs:comment "Amount of balance discrepancy if invalid"@en .
+
+fin:openingBalance a owl:ObjectProperty ;
+    rdfs:label "opening balance"@en ;
+    rdfs:domain fin:AccountStatement ;
+    rdfs:range fin:Amount ;
+    rdfs:comment "Opening balance of the account"@en .
+
+fin:closingBalance a owl:ObjectProperty ;
+    rdfs:label "closing balance"@en ;
+    rdfs:domain fin:AccountStatement ;
+    rdfs:range fin:Amount ;
+    rdfs:comment "Closing balance of the account"@en .
+
+fin:hasEntry a owl:ObjectProperty ;
+    rdfs:label "has entry"@en ;
+    rdfs:domain fin:AccountStatement ;
+    rdfs:range fin:StatementEntry ;
+    rdfs:comment "Statement entry"@en .
+
+fin:creditDebitIndicator a owl:DatatypeProperty ;
+    rdfs:label "credit/debit indicator"@en ;
+    rdfs:domain fin:StatementEntry ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Indicates if entry is credit (CRDT) or debit (DBIT)"@en .
+
+# ----------------------------------------------------------------------------
+# ISO 20022 Message Type Mappings
+# ----------------------------------------------------------------------------
+
+iso20022:camt_056 a owl:Class ;
+    rdfs:subClassOf fin:PaymentCancellation ;
+    rdfs:label "camt.056 Message"@en ;
+    rdfs:comment "FI To FI Payment Cancellation Request"@en .
+
+iso20022:camt_029 a owl:Class ;
+    rdfs:subClassOf fin:InvestigationResolution ;
+    rdfs:label "camt.029 Message"@en ;
+    rdfs:comment "Resolution of Investigation"@en .
+
+iso20022:camt_026 a owl:Class ;
+    rdfs:subClassOf fin:UnableToApply ;
+    rdfs:label "camt.026 Message"@en ;
+    rdfs:comment "Unable To Apply"@en .
+
+iso20022:pacs_008 a owl:Class ;
+    rdfs:subClassOf fin:PaymentInitiation ;
+    rdfs:label "pacs.008 Message"@en ;
+    rdfs:comment "FI To FI Customer Credit Transfer"@en .
+
+iso20022:pacs_009 a owl:Class ;
+    rdfs:subClassOf fin:PaymentSettlement ;
+    rdfs:label "pacs.009 Message"@en ;
+    rdfs:comment "Financial Institution Credit Transfer"@en .
+
+iso20022:camt_053 a owl:Class ;
+    rdfs:subClassOf fin:AccountStatement ;
+    rdfs:label "camt.053 Message"@en ;
+    rdfs:comment "Bank to Customer Statement"@en .
+
+# ----------------------------------------------------------------------------
+# Cancellation Reason Codes (ISO 20022 Standard)
+# ----------------------------------------------------------------------------
+
+fin:CUST a fin:CancellationReason ;
+    rdfs:label "Customer Request"@en ;
+    fin:reasonCode "CUST" ;
+    rdfs:comment "Cancellation requested by customer"@en .
+
+fin:DUPL a fin:CancellationReason ;
+    rdfs:label "Duplicate Payment"@en ;
+    fin:reasonCode "DUPL" ;
+    rdfs:comment "Payment is a duplicate"@en .
+
+fin:TECH a fin:CancellationReason ;
+    rdfs:label "Technical Problems"@en ;
+    fin:reasonCode "TECH" ;
+    rdfs:comment "Cancellation due to technical issues"@en .
+
+fin:FRAD a fin:CancellationReason ;
+    rdfs:label "Fraudulent Transaction"@en ;
+    fin:reasonCode "FRAD" ;
+    rdfs:comment "Suspected fraudulent transaction"@en .
+
+# ----------------------------------------------------------------------------
+# End of Ontology
+# ----------------------------------------------------------------------------
