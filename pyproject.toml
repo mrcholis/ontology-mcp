@@ -43,8 +43,8 @@ streaming = ["websockets>=12.0"]
 all = ["ontology-mcp[oxigraph,streaming]"]
 
 [project.urls]
-Homepage = "https://github.com/markqueue/ontology-mcp"
-Repository = "https://github.com/markqueue/ontology-mcp"
+Homepage = "https://github.com/Mbq24/ontology-mcp"
+Repository = "https://github.com/Mbq24/ontology-mcp"
 
 [project.scripts]
 ontology-mcp = "mcp_server:main"
