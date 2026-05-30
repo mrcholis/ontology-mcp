@@ -1,0 +1,11 @@
+venv/
+venv311/
+__pycache__/
+*.pyc
+.DS_Store
+.git/
+.gitignore
+graph_store/
+.env
+README/
+tests/

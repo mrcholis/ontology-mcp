@@ -28,7 +28,20 @@ Ontology solves all three by building a **typed, linked knowledge graph** with a
 
 ## Quick Start
 
-### 1. Install
+### Docker (easiest)
+
+```bash
+docker pull ghcr.io/mrcholis/ontology-mcp:latest
+docker run ghcr.io/mrcholis/ontology-mcp
+```
+
+Or run the demo:
+
+```bash
+docker run ghcr.io/mrcholis/ontology-mcp python demo.py
+```
+
+### pip install
 
 ```bash
 pip install ontology-mcp
