@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ontology MCP — ISO 20022 Knowledge Graph for AI Agents</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --border: #1e1e2a;
+    --text: #e4e4ec;
+    --muted: #7a7a8a;
+    --accent: #6c63ff;
+    --accent-glow: rgba(108, 99, 255, 0.15);
+    --green: #4ade80;
+    --code-bg: #181825;
+    --max-w: 720px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+  
+  /* Hero */
+  .hero {
+    padding: 80px 0 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #e4e4ec 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 580px;
+    margin: 0 auto 32px;
+  }
+  .hero-code {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 0.85rem;
+    display: inline-block;
+    color: var(--green);
+    text-align: left;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--accent-glow);
+    color: var(--accent);
+    border: 1px solid rgba(108, 99, 255, 0.3);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  /* Sections */
+  section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+  section:last-child { border-bottom: none; }
+  h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+  p, li { color: var(--muted); }
+  p { margin-bottom: 16px; }
+
+  /* Problem / Solution */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 8px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .card ul { list-style: none; padding: 0; }
+  .card li {
+    padding: 6px 0;
+    padding-left: 20px;
+    position: relative;
+    font-size: 0.9rem;
+  }
+  .card li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+  .problem .card { border-left: 3px solid #ef4444; }
+  .solution .card { border-left: 3px solid var(--green); }
+
+  /* Architecture */
+  .arch-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    padding: 20px 0;
+    font-size: 0.85rem;
+  }
+  .arch-step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    text-align: center;
+    font-weight: 500;
+    min-width: 100px;
+  }
+  .arch-arrow { color: var(--accent); font-size: 1.2rem; padding: 0 4px; }
+  .arch-end {
+    background: var(--accent);
+    color: #fff;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 600;
+  }
+
+  /* Tools table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  th { color: var(--muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  td:first-child { font-family: "SF Mono", "Fira Code", monospace; color: var(--green); font-size: 0.82rem; }
+
+  /* CTA */
+  .cta {
+    text-align: center;
+    padding: 60px 0;
+  }
+  .cta h2 { margin-bottom: 12px; }
+  .cta p { margin-bottom: 28px; color: var(--muted); }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    padding: 14px 36px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s;
+    margin: 0 8px 8px;
+  }
+  .btn:hover { background: #7b73ff; transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .btn-outline:hover { background: var(--surface); border-color: var(--accent); }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 32px 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* Messages table */
+  .msgs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .msg-chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: "SF Mono", monospace;
+    font-size: 0.8rem;
+  }
+  .msg-chip .label { color: var(--muted); font-family: -apple-system, sans-serif; display: block; font-size: 0.75rem; }
+  .msg-chip .code { color: var(--green); }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 2rem; }
+    .split { grid-template-columns: 1fr; }
+    .arch-flow { flex-direction: column; }
+    .arch-arrow { transform: rotate(90deg); }
+    .msgs { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="container">
+    <span class="badge">v2.0 · MIT · Open Source</span>
+    <h1>Ontology MCP</h1>
+    <p>Turn ISO 20022 banking messages into a queryable knowledge graph — accessible to any AI agent via the Model Context Protocol.</p>
+    <div class="hero-code">pip install ontology-mcp && python mcp_server.py</div>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+    <h2>The Problem</h2>
+    <div class="split">
+      <div class="problem">
+        <div class="card">
+          <ul>
+            <li>ISO 20022 is the global standard for financial messaging</li>
+            <li>Data is locked inside dense XML files</li>
+            <li>"Find all transactions over $50K involving BLUEUSNY" means grepping</li>
+            <li>Messages are interconnected but live in separate files</li>
+            <li>AI agents have no way to query the data</li>
+          </ul>
+        </div>
+      </div>
+      <div class="solution">
+        <div class="card">
+          <ul>
+            <li>Ingests raw XML → extracts typed financial signals</li>
+            <li>Builds an RDF knowledge graph (Oxigraph or rdflib)</li>
+            <li>10 MCP tools for natural language queries</li>
+            <li>Tracks full message lifecycles across pacs → camt chains</li>
+            <li>AI agents can ask questions in plain English</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Architecture</h2>
+    <div class="arch-flow">
+      <span class="arch-step">ISO 20022<br>XML</span>
+      <span class="arch-arrow">→</span>
+      <span class="arch-step">Signal<br>Extraction</span>
+      <span class="arch-arrow">→</span>
+      <span class="arch-step">RDF<br>Mapping</span>
+      <span class="arch-arrow">→</span>
+      <span class="arch-step">MCP<br>Tools</span>
+      <span class="arch-arrow">→</span>
+      <span class="arch-end">AI Agent</span>
+    </div>
+    <p style="text-align:center;margin-top:20px;font-size:0.85rem;color:var(--muted);">
+      Storage: Oxigraph (RocksDB persistent) · Fallback: rdflib (in-memory) · Transport: stdio MCP · Streaming: WebSocket
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Supported Messages</h2>
+    <div class="msgs">
+      <div class="msg-chip"><span class="label">Payment Initiation</span><span class="code">pacs.008</span></div>
+      <div class="msg-chip"><span class="label">Payment Settlement</span><span class="code">pacs.009</span></div>
+      <div class="msg-chip"><span class="label">Account Statement</span><span class="code">camt.053</span></div>
+      <div class="msg-chip"><span class="label">Debit/Credit Notification</span><span class="code">camt.054</span></div>
+      <div class="msg-chip"><span class="label">Cancellation Request</span><span class="code">camt.056</span></div>
+      <div class="msg-chip"><span class="label">Unable to Apply</span><span class="code">camt.026</span></div>
+      <div class="msg-chip"><span class="label">Cancellation Response</span><span class="code">camt.029</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Available Tools</h2>
+    <table>
+      <tr><th>Tool</th><th>Description</th></tr>
+      <tr><td>extract_and_map</td><td>Parse XML → signals → RDF, merge into graph</td></tr>
+      <tr><td>load_xml_file</td><td>Load XML from disk and process it</td></tr>
+      <tr><td>load_output_directory</td><td>Load all pre-built .ttl files from a folder</td></tr>
+      <tr><td>query_lifecycle</td><td>Full message chain for a case/transaction/BIC</td></tr>
+      <tr><td>sparql_query</td><td>Run arbitrary SPARQL against the graph</td></tr>
+      <tr><td>find_anomalies</td><td>Flag high-value txns, rejected cancellations, mismatches</td></tr>
+      <tr><td>get_institution_activity</td><td>All messages for a BIC code with totals</td></tr>
+      <tr><td>graph_stats</td><td>Triple count, signal breakdown, BIC inventory</td></tr>
+      <tr><td>start_stream_server</td><td>Start WebSocket server for streaming XML ingest</td></tr>
+      <tr><td>push_stream_message</td><td>Push XML over WebSocket in real-time</td></tr>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Example Queries</h2>
+    <div class="card" style="margin-bottom:12px;">
+      <p style="margin:0;font-family:'SF Mono',monospace;font-size:0.85rem;">
+        <span style="color:var(--accent)">User:</span> "What happened with cancellation case 20220718USDDSA9407803873?"<br>
+        <span style="color:var(--green)">Agent:</span> I found 4 messages in the lifecycle — pacs.008 initiated, camt.056 requested cancellation, camt.029 rejected (already settled), camt.026 notified unable to apply.
+      </p>
+    </div>
+    <div class="card">
+      <p style="margin:0;font-family:'SF Mono',monospace;font-size:0.85rem;">
+        <span style="color:var(--accent)">User:</span> "Are there any anomalies?"<br>
+        <span style="color:var(--green)">Agent:</span> Found 4 high-value transactions (>$50K) and 1 rejected cancellation.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="cta">
+  <div class="container">
+    <h2>Get Started</h2>
+    <p>Install, run, and connect any MCP-compatible AI agent in under a minute.</p>
+    <a class="btn" href="https://github.com/mrcholis/ontology-mcp">GitHub</a>
+    <a class="btn btn-outline" href="https://x.com/MrCholi_">X / Twitter</a>
+    <div style="margin-top:20px;">
+      <code style="background:var(--code-bg);padding:8px 16px;border-radius:8px;font-size:0.8rem;color:var(--green);">pip install ontology-mcp</code>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>MIT License · Built with <a href="https://github.com/mrcholis/ontology-mcp">Ontology MCP</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
