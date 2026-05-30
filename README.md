@@ -168,7 +168,7 @@ Found 1 rejected cancellation:
 ## Development
 
 ```bash
-git clone https://github.com/markqueue/ontology-mcp
+git clone https://github.com/mrcholis/ontology-mcp
 cd ontology-mcp
 python3.11 -m venv venv311
 source venv311/bin/activate
