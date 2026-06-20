@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir -r requirements311.txt
 COPY src/ src/
 COPY mcp_server.py .
 COPY xml_files/ xml_files/
-COPY output/ output/
+# output/ directory not present in repo; generated at runtime if needed
 COPY demo.py .
 
 # Default: run the MCP server (stdio mode)
